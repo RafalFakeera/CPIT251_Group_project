@@ -12,5 +12,6 @@ public class NewClass {
     public static void main(String [] arg){
         System.out.println("this is shahad");
         System.out.println("Hello, I am Samia");
+        System.out.println("Hi,Ftoon");
     }
 }

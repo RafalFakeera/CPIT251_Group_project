@@ -13,5 +13,6 @@ public class NewClass {
         System.out.println("this is shahad");
         System.out.println("Hello, I am Samia");
         System.out.println("Hi,Ftoon");
+        System.out.println("hello, this is shahad again while watching ms.maha video hehe >.<");
     }
 }

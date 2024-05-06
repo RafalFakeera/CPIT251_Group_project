@@ -1,14 +1,13 @@
 
 package pkg251_group_project;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Customer {
     private String customerId;
     private int cancelNumber;
     private List<String> purchasedProducts;
-    private List<String> enrolledVolunteer;
+    private LinkedList <VolunteerOpportunity> enrolledVolunteer;
     private List<String> bookedEvents;
     private List<String> creditCardDetails;
     private List<String> favoriteEvents;
@@ -18,7 +17,7 @@ public class Customer {
         this.customerId = customerId;
         this.cancelNumber = 0;
         this.purchasedProducts = new ArrayList<>();
-        this.enrolledVolunteer = new ArrayList<>();
+        this.enrolledVolunteer = new LinkedList<>();
         this.bookedEvents = new ArrayList<>();
         this.creditCardDetails = new ArrayList<>();
         this.favoriteEvents = new ArrayList<>();
@@ -26,8 +25,8 @@ public class Customer {
     }
 
     // Methods
-    public void cancelEnrollment(String event) {
-        enrolledVolunteer.remove(event);
+    public void cancelEnrollment(VolunteerOpportunity volunteer) {
+        enrolledVolunteer.remove(volunteer);
     }
 
     public void cancelBooking(String event) {
@@ -62,7 +61,7 @@ public class Customer {
         bookedEvents.add(event);
     }
 
-    public void enroll(String volunteer) {
+    public void enroll(VolunteerOpportunity volunteer) {
         enrolledVolunteer.add(volunteer);
     }
 
@@ -95,11 +94,11 @@ public class Customer {
         this.purchasedProducts = purchasedProducts;
     }
 
-    public List<String> getEnrolledVolunteer() {
+    public LinkedList<VolunteerOpportunity> getEnrolledVolunteer() {
         return enrolledVolunteer;
     }
 
-    public void setEnrolledVolunteer(List<String> enrolledVolunteer) {
+    public void setEnrolledVolunteer(LinkedList<VolunteerOpportunity> enrolledVolunteer) {
         this.enrolledVolunteer = enrolledVolunteer;
     }
 

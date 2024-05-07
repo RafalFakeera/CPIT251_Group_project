@@ -18,7 +18,7 @@ public class Products {
         return productId;
     }
 
-    public void setproductId(int id) {
+    public void setproductId(int productId) {
         this.productId = productId;
     }
 

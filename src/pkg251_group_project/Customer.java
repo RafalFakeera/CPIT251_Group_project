@@ -10,7 +10,7 @@ public class Customer {
     private LinkedList <VolunteerOpportunity> enrolledVolunteer;
     private List<String> bookedEvents;
     private List<String> creditCardDetails;
-    private List<String> favoriteEvents;
+    private List<Event> favoriteEvents;
     private List<String> cart;
 
     public Customer(String customerId) {
@@ -20,7 +20,7 @@ public class Customer {
         this.enrolledVolunteer = new LinkedList<>();
         this.bookedEvents = new ArrayList<>();
         this.creditCardDetails = new ArrayList<>();
-        this.favoriteEvents = new ArrayList<>();
+        this.favoriteEvents = new LinkedList<>();
         this.cart = new ArrayList<>();
     }
 
@@ -41,11 +41,11 @@ public class Customer {
         creditCardDetails.add(creditCard);
     }
 
-    public void addToFavorite(String event) {
-        favoriteEvents.add(event);
-    }
+    public void addToFavorite(Event event) {
+    favoriteEvents.add(event);
+}
 
-    public void removeFromFavorite(String event) {
+    public void removeFromFavorite(Event event) {
         favoriteEvents.remove(event);
     }
 
@@ -118,11 +118,11 @@ public class Customer {
         this.creditCardDetails = creditCardDetails;
     }
 
-    public List<String> getFavoriteEvents() {
+    public List<Event> getFavoriteEvents() {
         return favoriteEvents;
     }
 
-    public void setFavoriteEvents(List<String> favoriteEvents) {
+    public void setFavoriteEvents(List<Event> favoriteEvents) {
         this.favoriteEvents = favoriteEvents;
     }
 

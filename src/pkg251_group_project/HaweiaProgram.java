@@ -9,6 +9,8 @@ public class HaweiaProgram {
 
     //Create a LinkedList to store volunteer opportunities
     static LinkedList <VolunteerOpportunity> Opportunity = new LinkedList<>();
+    // Create a LinkedList to store events
+    static LinkedList<Event> events = new LinkedList<>();
 
     static Scanner scanner = new Scanner(System.in);
 
@@ -16,8 +18,11 @@ public class HaweiaProgram {
     
     //Method to print a welcoming message in the beginning of the program
     private static void displayWelcomeMessage() {
-        System.out.println("Welcome to Haweia!");
-        System.out.println("Our goal is to promote and highlight the rich culture and heritage of our Kingdom by providing an engaging and informative experience for users to explore.");
+        System.out.println("____________________________________________");
+        System.out.println("               Welcome to Haweia!               ");
+        System.out.println("____________________________________________");
+        System.out.println("Our goal is to promote and highlight the rich culture and heritage of our Kingdom by "
+                + "providing an engaging and informative experience for users to explore.");
         System.out.println("\n");
     }
 
@@ -80,13 +85,27 @@ public class HaweiaProgram {
         );
         Opportunity.add(opportunity3);
     }
+    
+    // Initialize events
+    public static void initializeEvents() {
+    Event event1 = new Event(1, "interactive mini golf event", "2024-05-10", "Events And More", "Elevate your golfing adventure on our futuristic course!", 40.00);
+    events.add(event1);
+
+    Event event2 = new Event(2, "Experience Bujairr event", "2024-06-15", "Bujairi Terrace and At-Turaif", "Diriyah's newest dining destination, Bujairi Terrace offers a vibrant program of events and activities in addition to see", 150.0);
+    events.add(event2);
+
+    Event event3 = new Event(3, "BlackBox event", "2024-07-20", "Events And More", "Dive into a classic arcade gaming experience at our social entertainment venue. From Pac-man to Pinball and beyond, it's a gaming paradise waiting to be explored!", 30.0);
+    events.add(event3);
+    }
+
 
     //After choosing the desired service, detailed information will be displayed
     private static String processServiceChoice(int choice) {
         switch (choice) {
             case 1:
                 // Call method to display events 
-
+                displayEvents();
+               
                 return "Event";
             case 2:
                 // Call method to display volunteer opportunities
@@ -103,7 +122,21 @@ public class HaweiaProgram {
         }
 
     }
-
+    private static void displayEvents() {
+    System.out.println("Events:");
+    for (Event event : events) {
+        System.out.println("Event ID: " + event.getId());
+        System.out.println("Name: " + event.getName());
+        System.out.println("Date: " + event.getDate());
+        System.out.println("Location: " + event.getLocation());
+        System.out.println("Description: " + event.getDescription());
+        System.out.println("Price: " + event.getPrice());
+        System.out.println("____________________________________________");
+    }
+    // After displaying events, prompt the user to add an event to favorites
+    askForFavoriteEvent();
+}
+ 
     //If the user chose 2 (Volunteer Opportunity) then print detailed information about each opportunity
     private static void displayOpportunityMessage() {
         System.out.println("Volunteer Opportunities:\n");
@@ -115,9 +148,58 @@ public class HaweiaProgram {
             displayRequirements(volunteeropportunity.getRequirements());
             System.out.println("Start Date: " + volunteeropportunity.getStartDate());
             System.out.println("End Date: " + volunteeropportunity.getEndDate());
-            System.out.println("--------------------------------------\n");
+            System.out.println("____________________________________________\n");
         }
     }
+    private static void askForFavoriteEvent() {
+      System.out.print("Enter the Event ID of the event you want to add to favorites: ");
+      int eventId = scanner.nextInt();
+      
+       // Find the event corresponding to the given Event ID
+      Event eventToAdd = null;
+      for (Event event : events) {
+           if (event.getId() == eventId) {
+              eventToAdd = event;
+              break;
+         }
+      }
+       // Check if the event is found
+           if (eventToAdd != null) {
+             // Call the addToFavorite method of the Customer class with the Event object
+            Ahmed.addToFavorite(eventToAdd);
+            System.out.println("Event added to favorites.");
+            displayFavoriteEvents(Ahmed, scanner);
+
+   
+          }else {
+            System.out.println("Event not found.");
+    }
+}
+    //Displays the favorite events for a given customer.
+   public static void displayFavoriteEvents(Customer customer, Scanner scanner) {
+    System.out.print("Do you want to see your favorite events? (y/n): ");
+    String response = scanner.next();
+
+    if (response.equalsIgnoreCase("y")) {
+        List<Event> favoriteEvents = customer.getFavoriteEvents();
+
+        if (favoriteEvents.isEmpty()) {
+            System.out.println("You have no favorite events.");
+        } else {
+            System.out.println("____________________________________________");
+            System.out.println("              Favorite Events:              ");
+            for (Event event : favoriteEvents) {
+                System.out.println("Event ID: " + event.getId());
+                System.out.println("Name: " + event.getName());
+                System.out.println("Date: " + event.getDate());
+                System.out.println("Location: " + event.getLocation());
+                System.out.println("Description: " + event.getDescription());
+                System.out.println("Price: " + event.getPrice());
+                System.out.println("____________________________________________");
+            }
+        }
+    }
+}
 
     //Method to print the requirements of each volunteer opportunity
     private static void displayRequirements(LinkedList <String> requirements) {
@@ -141,6 +223,7 @@ public class HaweiaProgram {
 
             enrollOpportunity(response);
         } 
+        
     }
 
     //This method will check if the requirements are fulfilled using isRequirementsFulfilled() method and the capacity using !isCapacityFull()
@@ -207,6 +290,9 @@ public class HaweiaProgram {
         
         //Initialize all volunteer opportunities
         initializeOpportunity();
+        
+        // Initialize all events
+        initializeEvents();
          
         //A loop that constantly ask the user if he want another service until he type “n”
         while (true) {

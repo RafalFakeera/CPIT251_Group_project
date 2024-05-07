@@ -11,7 +11,7 @@ public class Customer {
     private List<String> bookedEvents;
     private List<String> creditCardDetails;
     private List<Event> favoriteEvents;
-    private List<String> cart;
+    private List<Products> cart;
 
     public Customer(String customerId) {
         this.customerId = customerId;
@@ -49,7 +49,7 @@ public class Customer {
         favoriteEvents.remove(event);
     }
 
-    public void addToCart(String product) {
+    public void addToCart(Products product) {
         cart.add(product);
     }
 
@@ -126,11 +126,11 @@ public class Customer {
         this.favoriteEvents = favoriteEvents;
     }
 
-    public List<String> getCart() {
+    public List<Products> getCart() {
         return cart;
     }
 
-    public void setCart(List<String> cart) {
+    public void setCart(List<Products> cart) {
         this.cart = cart;
     }
 }

@@ -11,7 +11,9 @@ public class HaweiaProgram {
     static LinkedList <VolunteerOpportunity> Opportunity = new LinkedList<>();
     // Create a LinkedList to store events
     static LinkedList<Event> events = new LinkedList<>();
-
+    // Create a LinkedList to store products
+    static LinkedList<Products> products = new LinkedList<>();
+    
     static Scanner scanner = new Scanner(System.in);
 
     //Methods:
@@ -97,7 +99,18 @@ public class HaweiaProgram {
     Event event3 = new Event(3, "BlackBox event", "2024-07-20", "Events And More", "Dive into a classic arcade gaming experience at our social entertainment venue. From Pac-man to Pinball and beyond, it's a gaming paradise waiting to be explored!", 30.0);
     events.add(event3);
     }
+    
+    // Initialize products
+    public static void initializeProducts() {
+    Products product1 = new Products(1, "Qassim dates", 40, "A distinctive agricultural product produced in the Qassim region of the Kingdom of Saudi Arabia.");
+    products.add(product1);
 
+    Products product2 = new Products(2, "Saudi Arabian coffee", 20, "Saudi coffee is a Saudi product known for its high quality and unique flavor.");
+    products.add(product2);
+
+    Products product3 = new Products(3, "Noug milk", 10, "Noug milk is a product of Saudi company Noug.");
+    products.add(product3);
+    }
 
     //After choosing the desired service, detailed information will be displayed
     private static String processServiceChoice(int choice) {
@@ -114,6 +127,7 @@ public class HaweiaProgram {
                 return "Volunteer";
             case 3:
                 // Call method to display stores 
+                displayProducts();
 
                 return "Stores";
             default:
@@ -136,7 +150,20 @@ public class HaweiaProgram {
     // After displaying events, prompt the user to add an event to favorites
     askForFavoriteEvent();
 }
- 
+         
+    public static void displayProducts() {
+        System.out.println("Products:");
+        for (Products product : products) {
+            System.out.println("Product ID: " + product.getproductId());
+            System.out.println("Product Name: " + product.getproductName());
+            System.out.println("Product Price: " + product.getproductPrice());
+            System.out.println("Product Description: " + product.getproductDescription());
+            System.out.println("____________________________________________");
+        }
+        // After displaying products, prompt the user to buy product
+        askForBuyProduct();
+    }
+    
     //If the user chose 2 (Volunteer Opportunity) then print detailed information about each opportunity
     private static void displayOpportunityMessage() {
         System.out.println("Volunteer Opportunities:\n");
@@ -167,12 +194,35 @@ public class HaweiaProgram {
            if (eventToAdd != null) {
              // Call the addToFavorite method of the Customer class with the Event object
             Ahmed.addToFavorite(eventToAdd);
-            System.out.println("Event added to favorites.");
+            System.out.println("Event added to Cart.");
             displayFavoriteEvents(Ahmed, scanner);
 
    
           }else {
             System.out.println("Event not found.");
+    }
+}
+    private static void askForBuyProduct() {
+        System.out.print("Enter the Product ID of the product you want to buy: ");
+        int productID = scanner.nextInt();
+      
+        // Find the Product corresponding to the given Product ID
+        Products ProductToBuy = null;
+        for (Products product : products) {
+            if (product.getproductId() == productID) {
+              ProductToBuy = product;
+              break;
+        }
+      } 
+        // Check if the Product is found
+           if (ProductToBuy != null) {
+             // Call the addToCart method of the Customer class with the product object
+            Ahmed.addToCart(ProductToBuy);
+            System.out.println("Product added to Cart.");
+            displayCart(Ahmed, scanner);
+
+          }else {
+            System.out.println("Product not found.");
     }
 }
     //Displays the favorite events for a given customer.
@@ -200,7 +250,39 @@ public class HaweiaProgram {
         }
     }
 }
+    //Displays the cart products for a given customer.
+    public static void displayCart(Customer customer, Scanner scanner) {
+         System.out.print("Do you want to see your cart? (y/n): ");
+         String response = scanner.next();
 
+    if (response.equalsIgnoreCase("y")) {
+        List<Products> cart = customer.getCart();
+
+        if (cart.isEmpty()) {
+            System.out.println("You have no product in your cart.");
+        } else {
+            System.out.println("____________________________________________");
+            System.out.println("              Cart Products:              ");
+            for (Products product : cart) {
+                System.out.println("Product ID: " + product.getproductId());
+                System.out.println("Product Name: " + product.getproductName());
+                System.out.println("Product Price: " + product.getproductPrice());
+                System.out.println("Product Description: " + product.getproductDescription());
+                System.out.println("____________________________________________");
+            }
+            System.out.print("Do you want to buy the products? (y/n): ");
+            String res = scanner.next();
+            if (res.equalsIgnoreCase("y")) {
+                 if (cart.isEmpty()) {
+                     System.out.println("You have no product in your cart.");
+                  } else 
+                     cart.clear();
+                      System.out.println("Cart items purchased successfully.");
+            }
+        }
+    }
+}
+   
     //Method to print the requirements of each volunteer opportunity
     private static void displayRequirements(LinkedList <String> requirements) {
         if (requirements.isEmpty()) {
@@ -293,7 +375,10 @@ public class HaweiaProgram {
         
         // Initialize all events
         initializeEvents();
-         
+        
+        // Initialize all products
+        initializeProducts();
+        
         //A loop that constantly ask the user if he want another service until he type “n”
         while (true) {
 

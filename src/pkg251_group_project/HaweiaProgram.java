@@ -16,10 +16,20 @@ public class HaweiaProgram {
     
     static Scanner scanner = new Scanner(System.in);
 
+    public HaweiaProgram(){ 
+        //Initialize all volunteer opportunities
+        initializeOpportunity();
+        
+        // Initialize all events
+        initializeEvents();
+        
+        // Initialize all products
+        initializeProducts();
+    }
     //Methods:
     
     //Method to print a welcoming message in the beginning of the program
-    private static void displayWelcomeMessage() {
+    public static void displayWelcomeMessage() {
         System.out.println("____________________________________________");
         System.out.println("               Welcome to Haweia!               ");
         System.out.println("____________________________________________");
@@ -29,7 +39,7 @@ public class HaweiaProgram {
     }
 
     //Print the services we provide and let the user choose one of them to see their details
-    private static int promptUserForServiceChoice() {
+    public static int promptUserForServiceChoice() {
         System.out.println("Services:");
         System.out.println("1. Events");
         System.out.println("2. Volunteer Opportunities");
@@ -113,7 +123,7 @@ public class HaweiaProgram {
     }
 
     //After choosing the desired service, detailed information will be displayed
-    private static String processServiceChoice(int choice) {
+    public static String processServiceChoice(int choice) {
         switch (choice) {
             case 1:
                 // Call method to display events 
@@ -165,7 +175,7 @@ public class HaweiaProgram {
     }
     
     //If the user chose 2 (Volunteer Opportunity) then print detailed information about each opportunity
-    private static void displayOpportunityMessage() {
+    public static void displayOpportunityMessage() {
         System.out.println("Volunteer Opportunities:\n");
         for (VolunteerOpportunity volunteeropportunity : Opportunity) {
             System.out.println("Opportunity ID: " + volunteeropportunity.getOpportunityId());
@@ -295,22 +305,17 @@ public class HaweiaProgram {
     }
 
      //Method to ask the user if he want to enroll to one of the volunteer opportunities, if yes then call enrollOpportunity(response) method
-    private static void askForEnrollment() {
+    public static boolean askForEnrollment() {
         System.out.print("Would you like to enroll in a volunteer opportunity? (y/n): ");
         String response = scanner.next();
 
-        if (response.equalsIgnoreCase("y")) {
-            System.out.print("Choose the volunteer opportunity you like to enroll in (write opportunity ID):");
-            response = scanner.next();
-
-            enrollOpportunity(response);
-        } 
+        return response.equalsIgnoreCase("y");
         
     }
 
     //This method will check if the requirements are fulfilled using isRequirementsFulfilled() method and the capacity using !isCapacityFull()
     //If both are true, then enroll
-    public static void enrollOpportunity(String opportunityId) {
+    public static boolean enrollOpportunity(String opportunityId, boolean requirementsFulfilled) {
         // Find the selected opportunity in the linked list
         VolunteerOpportunity selectedOpportunity = null;
 
@@ -325,33 +330,52 @@ public class HaweiaProgram {
         if (selectedOpportunity != null) {
             
             
-            if (isRequirementsFulfilled(selectedOpportunity)) {
+            if (requirementsFulfilled) {
                 
                 if(!selectedOpportunity.isCapacityFull()){
                     Ahmed.enroll(selectedOpportunity);
                     selectedOpportunity.decreaseCapacity();
                     System.out.println("You have successfully enrolled in the volunteer opportunity.");
+                    return true;
                 } else { //If capacity is full
                     System.out.println("You cannot enroll in this opportunity because the capacity is full.");
                 }
                 
             } else { //If not all requirements are met
-                System.out.print("You cannot enroll in this opportunity as not all requirements are met.");
+                System.out.print("You cannot enroll in this opportunity as not all requirements are met.");   
             }
             
             
         } else { //If selectedOpportunity = null
             System.out.println("Invalid opportunity ID.");
+            
         }
         
-        
+        return false;
     }
 
-    //Method to print each requirement and ask the user if he fulfill the requirement
-    public static boolean isRequirementsFulfilled(VolunteerOpportunity selectedOpportunity) {
+    public static VolunteerOpportunity findOpportunity(String opportunityId){
 
+        //Finding opportunity using opportunityId
+        for (VolunteerOpportunity opportunity : Opportunity) {
+            if (opportunity.getOpportunityId().equalsIgnoreCase(opportunityId)) {
+                VolunteerOpportunity selectedOpportunity = opportunity;
+                return selectedOpportunity;
+            }
+        } return null;
+    }
+    
+//Method to print each requirement and ask the user if he fulfill the requirement
+    public static boolean isRequirementsFulfilled(String opportunityId) {
+
+        VolunteerOpportunity selectedOpportunity = findOpportunity(opportunityId);
+        
+        if (selectedOpportunity == null){
+            return false;
+        }
+        
         LinkedList<String> requirements = selectedOpportunity.getRequirements();
-
+        
         for (String requirement : requirements) {
             System.out.print("Do you fulfill the requirement: " + requirement + "? (y/n): ");
             String response = scanner.next();
@@ -369,15 +393,7 @@ public class HaweiaProgram {
 
         // Welcome message and program description
         displayWelcomeMessage();
-        
-        //Initialize all volunteer opportunities
-        initializeOpportunity();
-        
-        // Initialize all events
-        initializeEvents();
-        
-        // Initialize all products
-        initializeProducts();
+        HaweiaProgram Haweia = new HaweiaProgram();
         
         //A loop that constantly ask the user if he want another service until he type “n”
         while (true) {
@@ -387,7 +403,13 @@ public class HaweiaProgram {
 
             //Process user's choice and check if it's volunteer opportunities
             if (service.equalsIgnoreCase("Volunteer")) {
-                askForEnrollment();
+                if(askForEnrollment()){
+                    System.out.print("Choose the volunteer opportunity you like to enroll in (write opportunity ID):");
+                    String opportunityID = scanner.next();
+                    boolean requirementsFulfilled = isRequirementsFulfilled(opportunityID);
+                    enrollOpportunity(opportunityID,  requirementsFulfilled);
+                }
+
             }
 
             System.out.print("\nDo you need another service? (y/n) ");

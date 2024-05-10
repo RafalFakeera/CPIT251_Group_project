@@ -14,7 +14,10 @@ public class HaweiaProgram {
     // Create a LinkedList to store products
     static LinkedList<Products> products = new LinkedList<>();
     
+    private static int eventId;
     static Scanner scanner = new Scanner(System.in);
+    
+
 
     public HaweiaProgram(){ 
         //Initialize all volunteer opportunities
@@ -146,20 +149,21 @@ public class HaweiaProgram {
         }
 
     }
-    private static void displayEvents() {
-    System.out.println("Events:");
-    for (Event event : events) {
-        System.out.println("Event ID: " + event.getId());
-        System.out.println("Name: " + event.getName());
-        System.out.println("Date: " + event.getDate());
-        System.out.println("Location: " + event.getLocation());
-        System.out.println("Description: " + event.getDescription());
-        System.out.println("Price: " + event.getPrice());
-        System.out.println("____________________________________________");
+  public static void displayEvents() {
+        System.out.println("Events:");
+        for (Event event : events) {
+            System.out.println("Event ID: " + event.getId());
+            System.out.println("Name: " + event.getName());
+            System.out.println("Date: " + event.getDate());
+            System.out.println("Location: " + event.getLocation());
+            System.out.println("Description: " + event.getDescription());
+            System.out.println("Price: " + event.getPrice());
+            System.out.println("____________________________________________");
+        }
+        // After displaying events, prompt the user to add an event to favorites
+        System.out.print("Enter the Event ID of the event you want to add to favorites: ");
+        eventId = scanner.nextInt();
     }
-    // After displaying events, prompt the user to add an event to favorites
-    askForFavoriteEvent();
-}
          
     public static void displayProducts() {
         System.out.println("Products:");
@@ -188,30 +192,25 @@ public class HaweiaProgram {
             System.out.println("____________________________________________\n");
         }
     }
-    private static void askForFavoriteEvent() {
-      System.out.print("Enter the Event ID of the event you want to add to favorites: ");
-      int eventId = scanner.nextInt();
-      
-       // Find the event corresponding to the given Event ID
-      Event eventToAdd = null;
-      for (Event event : events) {
-           if (event.getId() == eventId) {
-              eventToAdd = event;
-              break;
-         }
-      }
-       // Check if the event is found
-           if (eventToAdd != null) {
-             // Call the addToFavorite method of the Customer class with the Event object
-            Ahmed.addToFavorite(eventToAdd);
-            System.out.println("Event added to Cart.");
-            displayFavoriteEvents(Ahmed, scanner);
+    public static boolean askForFavoriteEvent(int eventId) {
+            // Find the event corresponding to the given Event ID
+            Event eventToAdd = null;
+            for (Event event : events) {
+                if (event.getId() == eventId) {
+                    eventToAdd = event;
+                    break;
+                }
+            }
 
-   
-          }else {
-            System.out.println("Event not found.");
-    }
-}
+            // Check if the event is found
+            if (eventToAdd != null) {
+                // Call the addToFavorite method of the Customer class with the Event object
+                Ahmed.addToFavorite(eventToAdd);
+                return true; // Event found and added to favorites
+            } else {
+                return false; // Event not found
+            }
+        }
     private static void askForBuyProduct() {
         System.out.print("Enter the Product ID of the product you want to buy: ");
         int productID = scanner.nextInt();
@@ -234,32 +233,8 @@ public class HaweiaProgram {
           }else {
             System.out.println("Product not found.");
     }
-}
-    //Displays the favorite events for a given customer.
-   public static void displayFavoriteEvents(Customer customer, Scanner scanner) {
-    System.out.print("Do you want to see your favorite events? (y/n): ");
-    String response = scanner.next();
-
-    if (response.equalsIgnoreCase("y")) {
-        List<Event> favoriteEvents = customer.getFavoriteEvents();
-
-        if (favoriteEvents.isEmpty()) {
-            System.out.println("You have no favorite events.");
-        } else {
-            System.out.println("____________________________________________");
-            System.out.println("              Favorite Events:              ");
-            for (Event event : favoriteEvents) {
-                System.out.println("Event ID: " + event.getId());
-                System.out.println("Name: " + event.getName());
-                System.out.println("Date: " + event.getDate());
-                System.out.println("Location: " + event.getLocation());
-                System.out.println("Description: " + event.getDescription());
-                System.out.println("Price: " + event.getPrice());
-                System.out.println("____________________________________________");
-            }
-        }
-    }
-}
+   }
+    
     //Displays the cart products for a given customer.
     public static void displayCart(Customer customer, Scanner scanner) {
          System.out.print("Do you want to see your cart? (y/n): ");
@@ -395,11 +370,21 @@ public class HaweiaProgram {
         displayWelcomeMessage();
         HaweiaProgram Haweia = new HaweiaProgram();
         
+       
+        
         //A loop that constantly ask the user if he want another service until he type “n”
         while (true) {
 
             int choice = promptUserForServiceChoice();
             String service = processServiceChoice(choice);
+            
+        // This section adds the chosen event to favorites, if applicable, and provides feedback to the user
+        boolean eventAdded = askForFavoriteEvent(eventId);
+        if (eventAdded) {
+            System.out.println("Event added to favorites successfully.");
+        } else {
+            System.out.println("Event not found. Please check the event ID and try again.");
+        }
 
             //Process user's choice and check if it's volunteer opportunities
             if (service.equalsIgnoreCase("Volunteer")) {
@@ -420,3 +405,4 @@ public class HaweiaProgram {
         }
     }
 }
+

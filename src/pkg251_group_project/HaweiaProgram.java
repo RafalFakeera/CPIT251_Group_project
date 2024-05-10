@@ -15,8 +15,10 @@ public class HaweiaProgram {
     static LinkedList<Products> products = new LinkedList<>();
     
     private static int eventId;
-    static Scanner scanner = new Scanner(System.in);
+    private static int productId;
     
+    static Scanner scanner = new Scanner(System.in);
+    static Scanner scanner2 = new Scanner(System.in); 
 
 
     public HaweiaProgram(){ 
@@ -175,7 +177,8 @@ public class HaweiaProgram {
             System.out.println("____________________________________________");
         }
         // After displaying products, prompt the user to buy product
-        askForBuyProduct();
+        System.out.print("Enter the Product ID of the product you want to buy: ");
+        productId = scanner2.nextInt();
     }
     
     //If the user chose 2 (Volunteer Opportunity) then print detailed information about each opportunity
@@ -211,14 +214,11 @@ public class HaweiaProgram {
                 return false; // Event not found
             }
         }
-    private static void askForBuyProduct() {
-        System.out.print("Enter the Product ID of the product you want to buy: ");
-        int productID = scanner.nextInt();
-      
+    private static boolean askForBuyProduct(int productId) {
         // Find the Product corresponding to the given Product ID
         Products ProductToBuy = null;
         for (Products product : products) {
-            if (product.getproductId() == productID) {
+            if (product.getproductId() == productId) {
               ProductToBuy = product;
               break;
         }
@@ -227,46 +227,30 @@ public class HaweiaProgram {
            if (ProductToBuy != null) {
              // Call the addToCart method of the Customer class with the product object
             Ahmed.addToCart(ProductToBuy);
-            System.out.println("Product added to Cart.");
-            displayCart(Ahmed, scanner);
+            return true; // Product us found and added to cart
 
           }else {
-            System.out.println("Product not found.");
+             return false; // product not found
     }
    }
     
     //Displays the cart products for a given customer.
     public static void displayCart(Customer customer, Scanner scanner) {
-         System.out.print("Do you want to see your cart? (y/n): ");
-         String response = scanner.next();
-
-    if (response.equalsIgnoreCase("y")) {
+        System.out.print("Do you want to buy the products? (y/n): ");
+        String res = scanner.next();
+        
+    if (res.equalsIgnoreCase("y")) {
         List<Products> cart = customer.getCart();
-
-        if (cart.isEmpty()) {
-            System.out.println("You have no product in your cart.");
-        } else {
-            System.out.println("____________________________________________");
-            System.out.println("              Cart Products:              ");
-            for (Products product : cart) {
-                System.out.println("Product ID: " + product.getproductId());
-                System.out.println("Product Name: " + product.getproductName());
-                System.out.println("Product Price: " + product.getproductPrice());
-                System.out.println("Product Description: " + product.getproductDescription());
-                System.out.println("____________________________________________");
-            }
-            System.out.print("Do you want to buy the products? (y/n): ");
-            String res = scanner.next();
-            if (res.equalsIgnoreCase("y")) {
+            
                  if (cart.isEmpty()) {
-                     System.out.println("You have no product in your cart.");
+                    System.out.println("You have no product in your cart.");
                   } else 
-                     cart.clear();
-                      System.out.println("Cart items purchased successfully.");
-            }
+                    cart.clear();
+                    System.out.println("Cart items purchased successfully.");
+            
         }
     }
-}
+
    
     //Method to print the requirements of each volunteer opportunity
     private static void displayRequirements(LinkedList <String> requirements) {
@@ -370,14 +354,21 @@ public class HaweiaProgram {
         displayWelcomeMessage();
         HaweiaProgram Haweia = new HaweiaProgram();
         
-       
-        
         //A loop that constantly ask the user if he want another service until he type “n”
         while (true) {
 
             int choice = promptUserForServiceChoice();
             String service = processServiceChoice(choice);
-            
+           
+            // This section adds the chosen product to cart, if applicable, and provides feedback to the user and buy product
+            boolean productAdded = askForBuyProduct(productId) ;
+            if (productAdded) {
+                  System.out.println("Product added to cart successfully.");
+                  displayCart(Ahmed, scanner2);
+            } else {
+                  System.out.println("Product not found. Please check the product ID and try again.");
+            }
+        
         // This section adds the chosen event to favorites, if applicable, and provides feedback to the user
         boolean eventAdded = askForFavoriteEvent(eventId);
         if (eventAdded) {
@@ -385,6 +376,7 @@ public class HaweiaProgram {
         } else {
             System.out.println("Event not found. Please check the event ID and try again.");
         }
+
 
             //Process user's choice and check if it's volunteer opportunities
             if (service.equalsIgnoreCase("Volunteer")) {
@@ -396,7 +388,7 @@ public class HaweiaProgram {
                 }
 
             }
-
+        
             System.out.print("\nDo you need another service? (y/n) ");
             String response = scanner.next();
             if (!response.equalsIgnoreCase("y")) {

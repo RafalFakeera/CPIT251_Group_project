@@ -2,6 +2,7 @@
 package pkg251_group_project;
 
 import java.util.*;
+import static pkg251_group_project.HaweiaProgram.scanner;
 
 public class VolunteerOpportunity {
     private String opportunityId;
@@ -102,5 +103,11 @@ public class VolunteerOpportunity {
         }
     }
     
-        
+    public void printRequirements() {
+        System.out.println("Requirements for: " + this.name);
+        for (String requirement : requirements) {
+            System.out.println("- " + requirement);
+        }
+        System.out.println("");
+    }
 }

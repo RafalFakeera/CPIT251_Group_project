@@ -14,8 +14,8 @@ public class HaweiaProgram {
     // Create a LinkedList to store products
     static LinkedList<Products> products = new LinkedList<>();
     
-    private static int eventId;
-    private static int productId;
+    private static int eventId=2147483647;
+    private static int productId=2147483647;
     
     static Scanner scanner = new Scanner(System.in);
     static Scanner scanner2 = new Scanner(System.in); 
@@ -39,8 +39,8 @@ public class HaweiaProgram {
         System.out.println("               Welcome to Haweia!               ");
         System.out.println("____________________________________________");
         System.out.println("Our goal is to promote and highlight the rich culture and heritage of our Kingdom by "
-                + "providing an engaging and informative experience for users to explore.");
-        System.out.println("\n");
+                + "\nproviding an engaging and informative experience for users to explore.");
+        System.out.println("");
     }
 
     //Print the services we provide and let the user choose one of them to see their details
@@ -55,7 +55,8 @@ public class HaweiaProgram {
         return choice;
     }
 
-    //Initialize volunteer opportunities ->  multiple VolunteerOpportunity objects (default method)
+    //Initialization of linked lists ----------------------------------------------------------------------------
+    //1- Initialize volunteer opportunities -----------------------------------------------------------------
     public static void initializeOpportunity() {
 
         LinkedList<String> requirements_opportunity1 = new LinkedList<>();
@@ -103,7 +104,7 @@ public class HaweiaProgram {
         Opportunity.add(opportunity3);
     }
     
-    // Initialize events
+    //2- Initialize events -----------------------------------------------------------------
     public static void initializeEvents() {
     Event event1 = new Event(1, "interactive mini golf event", "2024-05-10", "Events And More", "Elevate your golfing adventure on our futuristic course!", 40.00);
     events.add(event1);
@@ -115,7 +116,7 @@ public class HaweiaProgram {
     events.add(event3);
     }
     
-    // Initialize products
+    //3- Initialize products -----------------------------------------------------------------
     public static void initializeProducts() {
     Products product1 = new Products(1, "Qassim dates", 40, "A distinctive agricultural product produced in the Qassim region of the Kingdom of Saudi Arabia.");
     products.add(product1);
@@ -151,8 +152,11 @@ public class HaweiaProgram {
         }
 
     }
-  public static void displayEvents() {
-        System.out.println("Events:");
+  
+    //Display methods ----------------------------------------------------------------------------
+    //1- Display events -----------------------------------------------------------------
+    public static void displayEvents() {
+        System.out.println("Eventssz:");
         for (Event event : events) {
             System.out.println("Event ID: " + event.getId());
             System.out.println("Name: " + event.getName());
@@ -166,7 +170,8 @@ public class HaweiaProgram {
         System.out.print("Enter the Event ID of the event you want to add to favorites: ");
         eventId = scanner.nextInt();
     }
-         
+     
+    //1- Display products -----------------------------------------------------------------
     public static void displayProducts() {
         System.out.println("Products:");
         for (Products product : products) {
@@ -181,6 +186,7 @@ public class HaweiaProgram {
         productId = scanner2.nextInt();
     }
     
+    //1- Display Volunteer Opportunity -----------------------------------------------------------------
     //If the user chose 2 (Volunteer Opportunity) then print detailed information about each opportunity
     public static void displayOpportunityMessage() {
         System.out.println("Volunteer Opportunities:\n");
@@ -195,6 +201,7 @@ public class HaweiaProgram {
             System.out.println("____________________________________________\n");
         }
     }
+    
     public static boolean askForFavoriteEvent(int eventId) {
             // Find the event corresponding to the given Event ID
             Event eventToAdd = null;
@@ -214,7 +221,8 @@ public class HaweiaProgram {
                 return false; // Event not found
             }
         }
-    private static boolean askForBuyProduct(int productId) {
+    
+    public static boolean askForBuyProduct(int productId) {
         // Find the Product corresponding to the given Product ID
         Products ProductToBuy = null;
         for (Products product : products) {
@@ -231,8 +239,17 @@ public class HaweiaProgram {
 
           }else {
              return false; // product not found
+          }
     }
-   }
+    
+    //Method to ask the user if he want to enroll to one of the volunteer opportunities, if yes then call enrollOpportunity(response) method
+    public static boolean askForEnrollment() {
+        System.out.print("Would you like to enroll in a volunteer opportunity? (y/n): ");
+        String response = scanner.next();
+
+        return response.equalsIgnoreCase("y");
+        
+    }
     
     //Displays the cart products for a given customer.
     public static void displayCart(Customer customer, Scanner scanner) {
@@ -250,7 +267,6 @@ public class HaweiaProgram {
             
         }
     }
-
    
     //Method to print the requirements of each volunteer opportunity
     private static void displayRequirements(LinkedList <String> requirements) {
@@ -261,15 +277,6 @@ public class HaweiaProgram {
                 System.out.println("- " + requirement);
             }
         }
-    }
-
-     //Method to ask the user if he want to enroll to one of the volunteer opportunities, if yes then call enrollOpportunity(response) method
-    public static boolean askForEnrollment() {
-        System.out.print("Would you like to enroll in a volunteer opportunity? (y/n): ");
-        String response = scanner.next();
-
-        return response.equalsIgnoreCase("y");
-        
     }
 
     //This method will check if the requirements are fulfilled using isRequirementsFulfilled() method and the capacity using !isCapacityFull()
@@ -312,42 +319,40 @@ public class HaweiaProgram {
         
         return false;
     }
+    
+//Method to print each requirement and ask the user if he fulfill the requirement
+    public static boolean isRequirementsFulfilled(String opportunityId, String response) {
 
-    public static VolunteerOpportunity findOpportunity(String opportunityId){
-
+        VolunteerOpportunity selectedOpportunity = null;
+        
         //Finding opportunity using opportunityId
         for (VolunteerOpportunity opportunity : Opportunity) {
             if (opportunity.getOpportunityId().equalsIgnoreCase(opportunityId)) {
-                VolunteerOpportunity selectedOpportunity = opportunity;
+                selectedOpportunity = opportunity;
+            }
+        }
+        
+        if (selectedOpportunity != null && response.equalsIgnoreCase("y")){
+            return true;
+        }
+
+        return false; // If requirements are not fulfilled, return false
+    }
+
+      public static VolunteerOpportunity findOpportunity(String opportunityId) {
+          
+          VolunteerOpportunity selectedOpportunity = null;
+          
+          //Finding opportunity using opportunityId
+          for (VolunteerOpportunity opportunity : Opportunity) {
+            if (opportunity.getOpportunityId().equalsIgnoreCase(opportunityId)) {
+                selectedOpportunity = opportunity;
                 return selectedOpportunity;
             }
         } return null;
-    }
-    
-//Method to print each requirement and ask the user if he fulfill the requirement
-    public static boolean isRequirementsFulfilled(String opportunityId) {
-
-        VolunteerOpportunity selectedOpportunity = findOpportunity(opportunityId);
-        
-        if (selectedOpportunity == null){
-            return false;
-        }
-        
-        LinkedList<String> requirements = selectedOpportunity.getRequirements();
-        
-        for (String requirement : requirements) {
-            System.out.print("Do you fulfill the requirement: " + requirement + "? (y/n): ");
-            String response = scanner.next();
-
-            if (!response.equalsIgnoreCase("y")) {
-                return false; // If user doesn't fulfill a requirement, return false immediately
-            }
-        }
-
-        return true; // If all requirements are fulfilled, return true
-    }
-
-//Main method:
+      }
+     
+    //Main method:
     public static void main(String[] args) {
 
         // Welcome message and program description
@@ -359,34 +364,58 @@ public class HaweiaProgram {
 
             int choice = promptUserForServiceChoice();
             String service = processServiceChoice(choice);
-           
-            // This section adds the chosen product to cart, if applicable, and provides feedback to the user and buy product
-            boolean productAdded = askForBuyProduct(productId) ;
-            if (productAdded) {
-                  System.out.println("Product added to cart successfully.");
-                  displayCart(Ahmed, scanner2);
-            } else {
-                  System.out.println("Product not found. Please check the product ID and try again.");
-            }
-        
-        // This section adds the chosen event to favorites, if applicable, and provides feedback to the user
-        boolean eventAdded = askForFavoriteEvent(eventId);
-        if (eventAdded) {
-            System.out.println("Event added to favorites successfully.");
-        } else {
-            System.out.println("Event not found. Please check the event ID and try again.");
-        }
 
-
-            //Process user's choice and check if it's volunteer opportunities
+            //1- Process user's choice and check if it's volunteer opportunities
             if (service.equalsIgnoreCase("Volunteer")) {
                 if(askForEnrollment()){
+                    //1- enter the opportunity ID of the pportunity you like to enroll in:
                     System.out.print("Choose the volunteer opportunity you like to enroll in (write opportunity ID):");
                     String opportunityID = scanner.next();
-                    boolean requirementsFulfilled = isRequirementsFulfilled(opportunityID);
-                    enrollOpportunity(opportunityID,  requirementsFulfilled);
-                }
+                    
+                    //2- find this opportunity using the opportunity ID:
+                    VolunteerOpportunity selectedOpportunity = findOpportunity(opportunityID);
+                    
+                    //3- print the requirements of the volunteer opportunity:
+                    if(selectedOpportunity==null){
+                        System.out.print("invalid ID , please check the list again");
+                    }
+                    else{
+                    selectedOpportunity.printRequirements();
+                    
+                    System.out.print("Do you fulfill these requirements?");
+                    String response = scanner.next();
 
+                    boolean requirementsFulfilled = isRequirementsFulfilled(opportunityID, response);
+                    enrollOpportunity(opportunityID,  requirementsFulfilled);
+                    }
+            }
+                    
+                    
+                
+
+            //2- Process user's choice and check if it's event    
+            } else if (service.equalsIgnoreCase("Event")){
+                // This section adds the chosen event to favorites, if applicable, and provides feedback to the user
+                boolean eventAdded = askForFavoriteEvent(eventId);
+                if(eventId!=2147483647){
+                if (eventAdded) {
+                    System.out.println("Event added to favorites successfully.");
+                } else {
+                    System.out.println("Event not found. Please check the event ID and try again.");
+                }
+                }
+            //3- Process user's choice and check if it's stores    
+            } else if (service.equalsIgnoreCase("Stores")){
+                // This section adds the chosen product to cart, if applicable, and provides feedback to the user and buy product
+                boolean productAdded = askForBuyProduct(productId) ;
+                if(productId!=2147483647){
+                if (productAdded) {
+                    System.out.println("Product added to cart successfully.");
+                    displayCart(Ahmed, scanner2);
+                } else {
+                    System.out.println("Product not found. Please check the product ID and try again.");
+                }
+            }
             }
         
             System.out.print("\nDo you need another service? (y/n) ");
@@ -397,4 +426,5 @@ public class HaweiaProgram {
         }
     }
 }
+
 

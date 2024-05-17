@@ -306,7 +306,39 @@ public class HaweiaProgram {
         return false;
     }
 
-//Method to print each requirement and ask the user if he fulfill the requirement
+    //Method to cancel an opportunity:
+    public static boolean cancelOpportunity(String opportunityId, Customer customer) {
+        // Find the opportunity in the enrolled volunteer opportunities
+        VolunteerOpportunity opportunityToCancel = null;
+        for (VolunteerOpportunity opportunity : customer.getEnrolledVolunteer()) {
+            if (opportunity.getOpportunityId().equalsIgnoreCase(opportunityId)) {
+                opportunityToCancel = opportunity;
+                break;
+            }
+        }
+
+        if (opportunityToCancel != null) {
+            // Check the number of cancellations
+            if (customer.getCancelNumber() >= 3) {
+                System.out.println("You cannot cancel the enrollment as you have reached the maximum number of cancellations.");
+                return false;
+            } else {
+                // Remove the opportunity from the enrolled list
+                customer.cancelEnrollment(opportunityToCancel);
+                // Increase the cancellation counter
+                customer.setCancelNumber(customer.getCancelNumber() + 1);
+                // Increase the capacity of the opportunity after cancel
+                opportunityToCancel.setCapacity(opportunityToCancel.getCapacity() + 1);
+                System.out.println("Enrollment canceled successfully.");
+                return true;
+            }
+        } else {
+            System.out.println("Opportunity not found.");
+            return false;
+        }
+    }
+    
+    //Method to print each requirement and ask the user if he fulfill the requirement
     public static boolean isRequirementsFulfilled(String opportunityId, String response) {
 
         VolunteerOpportunity selectedOpportunity = null;
@@ -372,6 +404,17 @@ public class HaweiaProgram {
 
                         boolean requirementsFulfilled = isRequirementsFulfilled(opportunityID, response);
                         enrollOpportunity(opportunityID, requirementsFulfilled);
+                    }
+                } else{
+                    //1- would you like to cancel a volunteer opportunity:
+                    System.out.print("Would you like to cancel your enrollment to one of the volunteer opportunities? (y/n)");
+                    String response = scanner.next();
+                    if (response.equalsIgnoreCase("y")) {
+                        System.out.print("Enter the Opportunity ID to cancel: ");
+                        String opportunityId = scanner.next();
+                        cancelOpportunity(opportunityId, Ahmed);
+                    } else if(!response.equalsIgnoreCase("n")){
+                        System.out.print("Invalid answer, try again later!");
                     }
                 }
 

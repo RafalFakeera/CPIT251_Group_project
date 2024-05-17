@@ -1,4 +1,3 @@
-
 package pkg251_group_project;
 
 import java.util.*;
@@ -7,7 +6,7 @@ public class Customer {
     private String customerId;
     private int cancelNumber;
     private List<String> purchasedProducts;
-    private LinkedList <VolunteerOpportunity> enrolledVolunteer;
+    private LinkedList<VolunteerOpportunity> enrolledVolunteer;
     private List<String> bookedEvents;
     private List<String> creditCardDetails;
     private List<Event> favoriteEvents;
@@ -42,8 +41,8 @@ public class Customer {
     }
 
     public void addToFavorite(Event event) {
-    favoriteEvents.add(event);
-}
+        favoriteEvents.add(event);
+    }
 
     public void removeFromFavorite(Event event) {
         favoriteEvents.remove(event);

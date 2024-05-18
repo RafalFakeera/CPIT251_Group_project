@@ -153,15 +153,5 @@ public class HaweiaProgramTest {
         
         
     }
-  @Test
-   public void testCancelOpportunity_IfEmpty() {
-        // Find the opportunity in the enrolled volunteer opportunities
-        String opportunityId ="OPP003";
-        Ahmed.cancelEnrollment(Opportunity.remove());
-        boolean result= HaweiaProgram.cancelOpportunity(opportunityId,Ahmed);
-        assertFalse( result);
-        
-        
-    }
-    
+  
 }

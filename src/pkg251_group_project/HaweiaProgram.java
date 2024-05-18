@@ -190,7 +190,7 @@ public class HaweiaProgram {
         }
     }
 
-    public static boolean askForFavoriteEvent(int eventId) {
+    public static boolean addToFavoriteEvent(int eventId) {
         // Find the event corresponding to the given Event ID
         Event eventToAdd = null;
         for (Event event : events) {
@@ -210,7 +210,7 @@ public class HaweiaProgram {
         }
     }
 
-    public static boolean askForBuyProduct(int productId) {
+    public static boolean addToCart(int productId) {
         // Find the Product corresponding to the given Product ID
         Products ProductToBuy = null;
         for (Products product : products) {
@@ -421,7 +421,7 @@ public class HaweiaProgram {
                 //2- Process user's choice and check if it's event    
             } else if (service.equalsIgnoreCase("Event")) {
                 // This section adds the chosen event to favorites, if applicable, and provides feedback to the user
-                boolean eventAdded = askForFavoriteEvent(eventId);
+                boolean eventAdded = addToFavoriteEvent(eventId);
                 if (eventId != 2147483647) {
                     if (eventAdded) {
                         System.out.println("Event added to favorites successfully.");
@@ -432,7 +432,7 @@ public class HaweiaProgram {
                 //3- Process user's choice and check if it's stores    
             } else if (service.equalsIgnoreCase("Stores")) {
                 // This section adds the chosen product to cart, if applicable, and provides feedback to the user and buy product
-                boolean productAdded = askForBuyProduct(productId);
+                boolean productAdded = addToCart(productId);
                 if (productId != 2147483647) {
                     if (productAdded) {
                         System.out.println("Product added to cart successfully.");
